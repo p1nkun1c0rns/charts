@@ -1,0 +1,148 @@
+image:
+  repository: messagebird/gcppromd
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+gcppromd:
+  # discovery frequency in seconds
+  frequency: 400
+  # name of the output file with targets
+  outputFileName: "targets.json"
+  projects: []
+  # auto-discovery of the projects based on which projects can be listed by the provided credentials.
+  projectsAutoDiscovery: true
+  # RE2 regex, all projects matching it will not be discovered
+  projectsExcludes: ""
+  # number of workers to perform the discovery
+  worker: "30"
+
+## Set the GCP service account key JSON file.
+## Service account has access be set to Cloud SQL instances
+## the key must be encoded with base64
+## e.g. `cat service-account.json | base64`
+## only used if no existing secret is specified
+##
+serviceAccountKey: ""
+
+## Specify an existing secret holding the GCP service account credentials
+existingSecret: ""
+## The key in the existing secret that stores the credenials
+existingSecretKey: ""
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# Optional nodeSelector annotations
+nodeSelector: {}
+
+# Optional tolerations annotations
+tolerations: []
+
+# Optional affinity annotations
+affinity: {}
+
+# Optional pod annotations
+podAnnotations: {}
+
+# Optional pod labels
+podLabels: {}
+
+# Optional service annotations
+serviceAnnotations: {}
+
+# Optional service labels
+serviceLabels: {}
+
+# Optional serviceAccount labels
+serviceAccountLabels: {}
+
+# Optional persistentVolume labels
+persistentVolumeLabels: {}
+
+persistentVolume:
+  ## If true, gcppromd will create/use a Persistent Volume Claim
+  ## If false, use emptyDir. You can do this but it makes no sense becuase you need to mount
+  ## the pvc also to the prometheus to use the file_sd.
+  ##
+  enabled: true
+
+  ## gcppromd data Persistent Volume access modes
+  ## Must match those of existing PV or dynamic provisioner
+  ## Ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  accessModes:
+    - ReadWriteOnce
+
+  ## gcppromd data Persistent Volume Claim annotations
+  ##
+  annotations: {}
+
+  ## gcppromd data Persistent Volume existing claim name
+  ## Requires gcppromd.persistentVolume.enabled: true
+  ## If defined, PVC must be created manually before volume will be bound
+  existingClaim: ""
+
+  ## gcppromd data Persistent Volume mount root path
+  ##
+  mountPath: /data
+
+  ## gcppromd data Persistent Volume size
+  ##
+  size: 2Gi
+
+  ## gcppromd data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+
+# Configuration for clusters with restrictive network policies in place:
+# - allowAll allows access to the gcppromd from any namespace
+# - customSelector is a list of pod/namespaceSelectors to allow access from
+# These options are mutually exclusive and the latter will take precedence.
+networkPolicy: {}
+  # allowAll: true
+  # customSelectors:
+  #   - namespaceSelector:
+  #       matchLabels:
+  #         type: admin
+  #   - podSelector:
+  #       matchLabels:
+  #         app: myapp
