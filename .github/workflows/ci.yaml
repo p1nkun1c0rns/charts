@@ -18,7 +18,7 @@ jobs:
         uses: karancode/yamllint-github-action@master
 
       - name: Lint Markdown files
-        uses: actionshub/markdownlint@v1.0.0
+        uses: actionshub/markdownlint@2.0.2
 
       - name: Lint Charts
         uses: helm/chart-testing-action@v2.1.0
