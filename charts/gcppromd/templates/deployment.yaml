@@ -1,0 +1,102 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gcppromd.fullname" . }}
+  labels:
+    {{- include "gcppromd.labels" . | nindent 4 }}
+spec:
+  # NOTE: becuase of the mounted PVC only one replicas can run on the sametime
+  replicas: 1
+  strategy:
+        # NOTE: same response as above
+        type: Recreate
+  selector:
+    matchLabels:
+      {{- include "gcppromd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "gcppromd.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "gcppromd.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - -daemon
+            - -frequency
+            - "{{ .Values.gcppromd.frequency }}"
+            - -outputPath 
+            - "{{ .Values.persistentVolume.mountPath }}/{{ .Values.gcppromd.outputFileName }}" 
+            {{- if gt (len .Values.gcppromd.projects) 0 -}}
+            - -projects
+            - "{{- range .Values.gcppromd.projects -}}{{ . }},{{- end }}"
+            {{- end }}
+            {{- if .Values.gcppromd.projectsAutoDiscovery }}
+            - -projects-auto-discovery
+            {{- end }}
+            {{- if .Values.gcppromd.projects }}
+            - -projects-excludes
+            - "{{ .Values.gcppromd.projectsExcludes }}"
+            {{- end }}
+            {{- if .Values.gcppromd.projects }}
+            - -workers
+            - "{{ .Values.gcppromd.workers }}"
+            {{- end }}
+          env:
+          {{ if or .Values.serviceAccountKey .Values.existingSecret -}}
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /secrets/gcppromd/{{- if .Values.existingSecret -}} {{ .Values.existingSecretKey }} {{- else -}} credentials.json {{- end }}
+          {{ end -}}
+        {{- if .Values.extraVars }}
+{{ toYaml .Values.extraVars | indent 12 }}
+        {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.persistentVolume.enabled }}
+          volumeMounts:
+            {{ if or .Values.serviceAccountKey .Values.existingSecret -}}
+            - name: google-application-credentials
+              mountPath: /secrets/gcppromd
+            {{ end -}}
+            - name: storage-volume
+              mountPath: "{{ .Values.persistentVolume.mountPath }}"
+              subPath: "{{ .Values.persistentVolume.subPath }}"
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.persistentVolume.enabled }}
+      volumes:
+        {{ if or .Values.serviceAccountKey .Values.existingSecret -}}
+        - name: google-application-credentials
+          secret:
+            secretName: {{ default (include "gcppromd.fullname" .) .Values.existingSecret }}
+        {{ end -}}
+        - name: storage-volume
+          persistentVolumeClaim:
+            claimName: {{ if .Values.persistentVolume.existingClaim }}{{ .Values.persistentVolume.existingClaim }}{{- else }}{{ template "gcppromd.fullname" . }}{{- end }}
+      {{- end -}}

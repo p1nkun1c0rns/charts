@@ -1,0 +1,13 @@
+apiVersion: v2
+name: gcppromd
+description: A Helm chart for gcppromd
+keywords:
+- prometheus-net-discovery
+- prometheus
+maintainers:
+- email: richard.steinbrueck@gmail.com
+  name: steinbrueckri
+type: application
+
+version: v1.0.0
+appVersion: "v0.4.0"
