@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "theo.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "theo.name" . }}
+    helm.sh/chart: {{ include "theo.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "theo.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "theo.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DB_ENGINE
+              value: "{{ .Values.db_engine }}"
+            - name: DB_HOST
+              value: "{{ .Values.db_host }}"
+            - name: DB_USER
+              value: "{{ .Values.db_user }}"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                {{ if and .Values.db_password_existingSecret .Values.db_password_existingSecretKey }}
+                    name: {{ .Values.db_password_existingSecret }}
+                    key: {{ .Values.db_password_existingSecretKey }}
+                {{ else }}
+                    name: "{{ include "theo.fullname" . }}-db-password"
+                    key: db_password
+                {{ end }}
+            - name: DB_NAME
+              value: "{{ .Values.db_name }}"
+            - name: ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                {{ if and .Values.admin_token_existingSecret .Values.admin_token_existingSecretKey }}
+                    name: {{ .Values.admin_token_existingSecret }}
+                    key: {{ .Values.admin_token_existingSecretKey }}
+                {{ else }}
+                    name: "{{ include "theo.fullname" . }}-admin-token"
+                    key: admin_token
+                {{ end }}
+            - name: CLIENT_TOKENS
+              valueFrom:
+                secretKeyRef:
+                {{ if and .Values.client_tokens_existingSecret .Values.client_tokens_existingSecretKey }}
+                    name: {{ .Values.client_tokens_existingSecret }}
+                    key: {{ .Values.client_tokens_existingSecretKey }}
+                {{ else }}
+                    name: "{{ include "theo.fullname" . }}-client-tokens"
+                    key: client_tokens
+                {{ end }}
+            - name: CACHE_ENABLED
+              value: "{{ .Values.cache_enabled }}"
+            - name: CACHE_URI
+              value: "{{ .Values.cache_uri }}"
+            - name: CACHE_OPTIONS
+              value: "{{ .Values.cache_options }}"
+            - name: REQUIRE_SIGNED_KEY
+              value: "{{ .Values.require_signed_key }}"
+            - name: CLUSTER_MODE
+              value: "{{ .Values.cluster_mode }}"
+            - name: LOG_AUTH_KEYS_URL
+              value: "{{ .Values.log_auth_keys_uri }}"
+            - name: LOG_AUTH_KEYS_TOKEN
+              value: "{{ .Values.log_auth_keys_token }}"
+          ports:
+            - name: http
+              containerPort: 9100
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
