@@ -1,51 +1,57 @@
-# Default values for theo.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+# replicaCount -- (int) Number of nginx-ingress pods to load balance between
 replicaCount: 3
 
 image:
+  # image.repository -- Name of the container repository
   repository: theoapp/theo
+  # image.tag -- Version of the container
+  tag:
+  # image.pullPolicy -- value can be Always, Never, IfNotPresent.
   pullPolicy: IfNotPresent
 
 nameOverride: ""
 fullnameOverride: ""
 
 ## theo configuration parameters
-# Mariadb server hostname or ip	string
+# db_engine -- at the moment only mariadb, theo will support postgresql in the future.
 db_engine: mariadb
+# db_host -- Mariadb server hostname or ip	string (**Manatory**)
 db_host: ""
-# Mariadb username	string
+# db_user -- Database username (**Manatory**)
 db_user: ""
-# Mariadb password	string
+# db_user -- Database Password (**Manatory**)
 db_password: ""
+# db_password_existingSecret -- if set db_password will be ignored.
 db_password_existingSecret: ""
+# db_password_existingSecretKey -- if set db_password will be ignored.
 db_password_existingSecretKey: ""
-# Mariadb database	string
+# db_name -- Database name (**Manatory**)
 db_name: ""
-# Admin token: string
-# if not filled it will generate one token by default
+# admin_token -- - **For test only, dont use in production.** If empty will generate a random admin token.
 admin_token: ""
+# admin_token_existingSecret -- if set admin_token will be ignored.
 admin_token_existingSecret: ""
+# admin_token_existingSecretKey -- if set admin_token will be ignored.
 admin_token_existingSecretKey: ""
-# Client tokens: comma separated Type: string
-# if not filled it will generate one token by default
+# client_tokens -- **For test only, dont use in production.** If empty will generate a random client token, can be filled with multiple client tokens separated by comma.
 client_tokens: ""
+# client_tokens_existingSecretKey -- if set client_tokens will be ignored.
 client_tokens_existingSecret: ""
+# client_tokens_existingSecretKey -- if set client_tokens will be ignored.
 client_tokens_existingSecretKey: ""
-# if set, the cache server will be used	Type: enum - redis or memcached
+# cache_enabled -- redis or memcached
 cache_enabled: "redis"
-# memcached or redis connection url
+# cache_uri -- memcached or redis connection url
 cache_uri: ""
-# cache parameters	string
-cache_options: ""
-# Accept only signed keys	tinyint (0/1)
-require_signed_key: "0"
-# Enable features for cluster env	tinyint (0/1)
-cluster_mode: "0"
-# Enable remote log of successful requests	string
+# cache_options -- parameters
+cache_options: "false"
+# require_signed_key -- Accept only signed keys (0/1)
+require_signed_key: 0
+# cluster_mode -- Enable features for cluster env (0/1)
+cluster_mode: 0
+# log_auth_keys_url -- Enable remote log of successful requests
 log_auth_keys_url: ""
-# Authorization Bearer for LOG_AUTH_KEYS_URL
+# log_auth_keys_token -- Authorization Bearer for LOG_AUTH_KEYS_URL
 log_auth_keys_token: ""
 
 service:
@@ -53,13 +59,15 @@ service:
   port: 80
 
 ingress:
+  # ingress.enabled -- Enable ingress
   enabled: false
+  # ingress.annotations -- The annotations to be applied to ingress
   annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   paths: []
   hosts:
-    - chart-example.local
+    - theo.example.org
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
