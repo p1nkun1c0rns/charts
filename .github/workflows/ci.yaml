@@ -24,10 +24,11 @@ jobs:
         run: .github/scripts/helm-docs.sh
 
       - name: ⤴️ Commit automatically generated documentation
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: EndBug/add-and-commit@v7
         with:
-          file_pattern: "*[.md]"
-          commit_message: automatically generated documentation
+          message: Show GitHub Actions logo
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
 
       - name: 🚀 Run helm-chart lint
         uses: helm/chart-testing-action@v2.1.0

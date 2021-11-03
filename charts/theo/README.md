@@ -4,6 +4,12 @@
 
 A Helm chart for Theo
 
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| steinbrueckri | richard.steinbrueck@gmail.com |  |
+
 ## Values
 
 | Key | Type | Default | Description |
