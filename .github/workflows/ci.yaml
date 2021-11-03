@@ -26,9 +26,10 @@ jobs:
       - name: ⤴️ Commit automatically generated documentation
         uses: EndBug/add-and-commit@v7
         with:
-          message: Show GitHub Actions logo
+          message: add automatically generated documentation
           committer_name: GitHub Actions
           committer_email: actions@github.com
+          add: '*.md'
 
       - name: 🚀 Run helm-chart lint
         uses: helm/chart-testing-action@v2.1.0
