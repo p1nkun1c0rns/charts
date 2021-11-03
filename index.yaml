@@ -3,6 +3,22 @@ entries:
   gcppromd:
   - apiVersion: v2
     appVersion: v0.4.0
+    created: "2021-11-03T16:34:27.926878436Z"
+    description: A Helm chart for gcppromd
+    digest: 115344407912dc4cae0db1b03e3a86429b2305c8a0826ad18a8f2ba135032bd4
+    keywords:
+    - prometheus-net-discovery
+    - prometheus
+    maintainers:
+    - email: richard.steinbrueck@gmail.com
+      name: steinbrueckri
+    name: gcppromd
+    type: application
+    urls:
+    - https://github.com/p1nkun1c0rns/charts/releases/download/gcppromd-v1.0.3/gcppromd-v1.0.3.tgz
+    version: v1.0.3
+  - apiVersion: v2
+    appVersion: v0.4.0
     created: "2021-06-11T12:24:34.306111226Z"
     description: A Helm chart for gcppromd
     digest: f56f6f114bcfc6e696633adac3f7df8728d16c687af6364760dcd4f2fa9c5c5e
@@ -20,6 +36,22 @@ entries:
   prometheus-net-discovery:
   - apiVersion: v2
     appVersion: v1.3.3
+    created: "2021-11-03T16:34:28.117471338Z"
+    description: A Helm chart for prometheus-net-discovery
+    digest: c6957de76f598e9f6f685b5c51fae6d9d6ce609aee0e27962b730bb11b8f7378
+    keywords:
+    - prometheus-net-discovery
+    - prometheus
+    maintainers:
+    - email: richard.steinbrueck@gmail.com
+      name: steinbrueckri
+    name: prometheus-net-discovery
+    type: application
+    urls:
+    - https://github.com/p1nkun1c0rns/charts/releases/download/prometheus-net-discovery-v1.3.6/prometheus-net-discovery-v1.3.6.tgz
+    version: v1.3.6
+  - apiVersion: v2
+    appVersion: v1.3.3
     created: "2021-11-03T11:14:10.014398451Z"
     description: A Helm chart for prometheus-net-discovery
     digest: 7b6395725a4ac7fd1093241de51d72247d45afada556c9cae7d59b441a245007
@@ -35,6 +67,18 @@ entries:
     - https://github.com/p1nkun1c0rns/charts/releases/download/prometheus-net-discovery-v1.3.5/prometheus-net-discovery-v1.3.5.tgz
     version: v1.3.5
   theo:
+  - apiVersion: v1
+    appVersion: 1.3.0
+    created: "2021-11-03T16:34:28.311415979Z"
+    description: A Helm chart for Theo
+    digest: 1134cb51e50bb97461e59add47bf33c0b03dcea19ac01397f2b31857bca52788
+    maintainers:
+    - email: richard.steinbrueck@gmail.com
+      name: steinbrueckri
+    name: theo
+    urls:
+    - https://github.com/p1nkun1c0rns/charts/releases/download/theo-0.1.3/theo-0.1.3.tgz
+    version: 0.1.3
   - apiVersion: v1
     appVersion: 1.3.0
     created: "2021-11-03T11:16:19.270252925Z"
@@ -56,4 +100,4 @@ entries:
     urls:
     - https://github.com/p1nkun1c0rns/charts/releases/download/theo-0.1.0/theo-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-03T11:16:19.270263726Z"
+generated: "2021-11-03T16:34:28.31143118Z"
