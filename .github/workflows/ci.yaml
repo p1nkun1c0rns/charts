@@ -20,6 +20,15 @@ jobs:
       - name: Lint Markdown files
         uses: actionshub/markdownlint@2.0.2
 
+      - name: Generate helm-chart documentation
+        run: .github/scripts/helm-docs.sh
+
+      - name: Commit rendered png and svg files
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          file_pattern: "*[.md]"
+          commit_message: automatically generated documentation
+
       - name: Lint Charts
         uses: helm/chart-testing-action@v2.1.0
         with:
