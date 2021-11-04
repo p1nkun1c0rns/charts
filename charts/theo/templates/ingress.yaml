@@ -30,17 +30,6 @@ spec:
     - host: {{ .name | quote }}
       http:
         paths:
-<<<<<<< HEAD
-	{{- range $ingressPaths }}
-          - path: {{ . }}
-            backend:
-              service:
-                name: {{ $fullName }}
-                port:
-                  number: 80
-	{{- end }}
-=======
           {{- .paths | toYaml | nindent 10 }}
->>>>>>> 03cbec6 (Change ingress to fix issue with API version)
   {{- end }}
 {{- end }}
