@@ -69,6 +69,18 @@ entries:
   theo:
   - apiVersion: v1
     appVersion: 1.3.0
+    created: "2021-11-04T08:23:08.098436241Z"
+    description: A Helm chart for Theo
+    digest: fdae5b746b92f6943a77be940fe1ab50040ee1070b4362234a2d70a9047323d6
+    maintainers:
+    - email: richard.steinbrueck@gmail.com
+      name: steinbrueckri
+    name: theo
+    urls:
+    - https://github.com/p1nkun1c0rns/charts/releases/download/theo-0.1.5/theo-0.1.5.tgz
+    version: 0.1.5
+  - apiVersion: v1
+    appVersion: 1.3.0
     created: "2021-11-03T16:34:28.311415979Z"
     description: A Helm chart for Theo
     digest: 1134cb51e50bb97461e59add47bf33c0b03dcea19ac01397f2b31857bca52788
@@ -100,4 +112,4 @@ entries:
     urls:
     - https://github.com/p1nkun1c0rns/charts/releases/download/theo-0.1.0/theo-0.1.0.tgz
     version: 0.1.0
-generated: "2021-11-03T16:34:28.31143118Z"
+generated: "2021-11-04T08:23:08.098464241Z"
