@@ -1,0 +1,23 @@
+# Source: theo/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: theo-1636021256
+  labels:
+    app.kubernetes.io/name: theo
+    helm.sh/chart: theo-0.1.5
+    app.kubernetes.io/instance: theo-1636021256
+    app.kubernetes.io/managed-by: Helm
+spec:
+  ingressClassName: nginx-ingress
+  rules:
+    - host: "theo.example.org"
+      http:
+        paths:
+          - backend:
+              service:
+                name: theo-ingress
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix

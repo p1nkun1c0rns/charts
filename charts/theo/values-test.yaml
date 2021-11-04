@@ -1,0 +1,29 @@
+db_engine: mariadb
+db_host: "mysql-gcloud-sqlproxy.cloudsql.svc.cluster.local"
+db_user: "theo"
+db_password_existingSecret: theo-db
+db_password_existingSecretKey: password
+db_name: "theo"
+admin_token_existingSecret: theo-token
+admin_token_existingSecretKey: admin_token
+client_tokens_existingSecret: theo-token
+client_tokens_existingSecretKey: client_tokens
+cache_enabled: "redis"
+cache_uri: "redis://redis-master.theo.svc.cluster.local:6379"
+
+
+ingress:
+  classname: internal
+  # ingress.enabled -- Enable ingress
+  enabled: true
+  # ingress.annotations -- The annotations to be applied to ingress
+  hosts:
+    - name: theo.example.org
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: theo-ingress
+              port:
+                number: 80

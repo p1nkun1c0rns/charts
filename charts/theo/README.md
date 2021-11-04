@@ -42,11 +42,14 @@ A Helm chart for Theo
 | log_auth_keys_token | string | `""` | Authorization Bearer for LOG_AUTH_KEYS_URL |
 | service.type | string | `"ClusterIP"` |  |
 | service.port | int | `80` |  |
+| ingress.classname | string | `"nginx-ingress"` |  |
 | ingress.enabled | bool | `false` | Enable ingress |
 | ingress.annotations | object | `{}` | The annotations to be applied to ingress |
-| ingress.ingressClassName | string | `""` |  |
-| ingress.paths | list | `[]` |  |
-| ingress.hosts[0] | string | `"theo.example.org"` |  |
+| ingress.hosts[0].name | string | `"theo.example.org"` |  |
+| ingress.hosts[0].paths[0].path | string | `"/"` |  |
+| ingress.hosts[0].paths[0].pathType | string | `"Prefix"` |  |
+| ingress.hosts[0].paths[0].backend.service.name | string | `"theo-ingress"` |  |
+| ingress.hosts[0].paths[0].backend.service.port.number | int | `80` |  |
 | ingress.tls | list | `[]` |  |
 | resources | object | `{}` |  |
 | nodeSelector | object | `{}` |  |

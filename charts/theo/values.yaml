@@ -59,15 +59,23 @@ service:
   port: 80
 
 ingress:
+  classname: nginx-ingress
   # ingress.enabled -- Enable ingress
   enabled: false
   # ingress.annotations -- The annotations to be applied to ingress
   annotations: {}
-  ingressClassName: ""
     # kubernetes.io/tls-acme: "true"
-  paths: []
   hosts:
-    - theo.example.org
+    - name: theo.example.org
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: theo-ingress
+              port:
+                number: 80
+
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

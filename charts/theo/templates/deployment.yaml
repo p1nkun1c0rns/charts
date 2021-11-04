@@ -33,35 +33,35 @@ spec:
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                {{ if and .Values.db_password_existingSecret .Values.db_password_existingSecretKey }}
-                    name: {{ .Values.db_password_existingSecret }}
-                    key: {{ .Values.db_password_existingSecretKey }}
-                {{ else }}
-                    name: "{{ include "theo.fullname" . }}-db-password"
-                    key: db_password
-                {{ end }}
+                {{- if and .Values.db_password_existingSecret .Values.db_password_existingSecretKey }}
+                  name: {{ .Values.db_password_existingSecret }}
+                  key: {{ .Values.db_password_existingSecretKey }}
+                {{- else }}
+                  name: "{{ include "theo.fullname" . }}-db-password"
+                  key: db_password
+                {{- end }}
             - name: DB_NAME
               value: "{{ .Values.db_name }}"
             - name: ADMIN_TOKEN
               valueFrom:
                 secretKeyRef:
-                {{ if and .Values.admin_token_existingSecret .Values.admin_token_existingSecretKey }}
-                    name: {{ .Values.admin_token_existingSecret }}
-                    key: {{ .Values.admin_token_existingSecretKey }}
-                {{ else }}
+                {{- if and .Values.admin_token_existingSecret .Values.admin_token_existingSecretKey }}
+                  name: {{ .Values.admin_token_existingSecret }}
+                  key: {{ .Values.admin_token_existingSecretKey }}
+                {{- else }}
                     name: "{{ include "theo.fullname" . }}-admin-token"
                     key: admin_token
-                {{ end }}
+                {{- end }}
             - name: CLIENT_TOKENS
               valueFrom:
                 secretKeyRef:
-                {{ if and .Values.client_tokens_existingSecret .Values.client_tokens_existingSecretKey }}
-                    name: {{ .Values.client_tokens_existingSecret }}
-                    key: {{ .Values.client_tokens_existingSecretKey }}
-                {{ else }}
-                    name: "{{ include "theo.fullname" . }}-client-tokens"
-                    key: client_tokens
-                {{ end }}
+                {{- if and .Values.client_tokens_existingSecret .Values.client_tokens_existingSecretKey }}
+                  name: {{ .Values.client_tokens_existingSecret }}
+                  key: {{ .Values.client_tokens_existingSecretKey }}
+                {{- else }}
+                  name: "{{ include "theo.fullname" . }}-client-tokens"
+                  key: client_tokens
+                {{- end }}
             - name: CACHE_ENABLED
               value: "{{ .Values.cache_enabled }}"
             - name: CACHE_URI
