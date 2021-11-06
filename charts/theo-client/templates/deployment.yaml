@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "theo-client.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "theo-client.name" . }}
+    helm.sh/chart: {{ include "theo-client.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "theo-client.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "theo-client.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ default .Chart.AppVersion .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: THEO_URL
+              value: "{{ .Values.url }}"
+            - name: THEO_ADMIN_TOKEN
+              valueFrom:
+                secretKeyRef:
+                {{- if and .Values.admin_token_existingSecret .Values.admin_token_existingSecretKey }}
+                  name: {{ .Values.admin_token_existingSecret }}
+                  key: {{ .Values.admin_token_existingSecretKey }}
+                {{- else }}
+                    name: "{{ include "theo-client.fullname" . }}-admin-token"
+                    key: admin_token
+                {{- end }}
+            - name: THEO_CLIENT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                {{- if and .Values.client_token_existingSecret .Values.client_token_existingSecretKey }}
+                  name: {{ .Values.client_token_existingSecret }}
+                  key: {{ .Values.client_token_existingSecretKey }}
+                {{- else }}
+                  name: "{{ include "theo-client.fullname" . }}-client-tokens"
+                  key: client_token
+                {{- end }}
+          ports:
+            - name: http
+              containerPort: 22
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 22
+          readinessProbe:
+            tcpSocket:
+              port: 22
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
