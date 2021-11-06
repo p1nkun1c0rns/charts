@@ -1,0 +1,53 @@
+# replicaCount -- Number of pods
+replicaCount: 1
+
+image:
+  # image.repository -- Name of the container repository
+  repository: steinbrueckri/theo-client
+  # image.tag -- Version of the container
+  tag:
+  # image.pullPolicy -- value can be Always, Never, IfNotPresent.
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+## theo-client configuration parameters
+# url -- The URL of the theo instance to connect
+url: "http://theo.namespace.svc.cluster.local"
+# admin_token -- - **For test only, dont use in production.**
+admin_token: ""
+# admin_token_existingSecret -- if set admin_token will be ignored.
+admin_token_existingSecret: ""
+# admin_token_existingSecretKey -- if set admin_token will be ignored.
+admin_token_existingSecretKey: ""
+# client_token -- **For test only, dont use in production.**
+client_token: ""
+# client_token_existingSecret -- if set client_token will be ignored.
+client_token_existingSecret: ""
+# client_token_existingSecretKey -- if set client_token will be ignored.
+client_token_existingSecretKey: ""
+
+service:
+  type: ClusterIP
+  port: 22
+
+# TODO: ingress need to be added
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
