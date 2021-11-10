@@ -14,11 +14,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 🔩 Install dependencys
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: 🔩 Setup helmchart lint
+        uses: helm/chart-testing-action@main
+
       - name: 🚀 Run yamllint
         uses: frenck/action-yamllint@v1
 
       - name: 🚀 Run markdownlint
         uses: actionshub/markdownlint@2.0.2
+
+      - name: 🚀 Run helmchart lint
+        run: ct lint --chart-dirs community --chart-dirs cloud-platform --excluded-charts istio-operator --config ./.github/ct.yaml
 
       - name: 📝Generate helm-chart documentation
         run: .github/scripts/helm-docs.sh
@@ -30,8 +41,3 @@ jobs:
           committer_name: GitHub Actions
           committer_email: actions@github.com
           add: '*.md'
-
-      - name: 🚀 Run helm-chart lint
-        uses: helm/chart-testing-action@v2.1.0
-        with:
-          command: lint --all --debug
