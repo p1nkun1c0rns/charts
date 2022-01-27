@@ -29,13 +29,13 @@ jobs:
         uses: actionshub/markdownlint@2.0.2
 
       - name: 🚀 Run helmchart lint
-        run: ct lint --chart-dirs community --chart-dirs cloud-platform --excluded-charts istio-operator --config ./.github/ct.yaml
+        run: ct lint --all --config ./.github/ct.yaml
 
       - name: 📝Generate helm-chart documentation
         run: .github/scripts/helm-docs.sh
 
       - name: ⤴️ Commit automatically generated documentation
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v8.0.1
         with:
           message: add automatically generated documentation
           committer_name: GitHub Actions
