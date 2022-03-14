@@ -35,7 +35,7 @@ jobs:
         run: .github/scripts/helm-docs.sh
 
       - name: ⤴️ Commit automatically generated documentation
-        uses: EndBug/add-and-commit@v8.0.2
+        uses: EndBug/add-and-commit@v9
         with:
           message: add automatically generated documentation
           committer_name: GitHub Actions
