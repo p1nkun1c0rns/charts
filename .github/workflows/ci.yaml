@@ -26,7 +26,7 @@ jobs:
         uses: frenck/action-yamllint@v1
 
       - name: 🚀 Run markdownlint
-        uses: actionshub/markdownlint@2.0.2
+        uses: actionshub/markdownlint@v2.1.2
 
       - name: 🚀 Run helmchart lint
         run: ct lint --all --config ./.github/ct.yaml
